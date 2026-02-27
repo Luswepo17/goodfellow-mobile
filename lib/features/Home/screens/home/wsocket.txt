@@ -1,0 +1,101 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/io.dart';
+
+class WebSocketExample extends StatefulWidget {
+  const WebSocketExample({super.key});
+
+  @override
+  State<WebSocketExample> createState() => _WebSocketExampleState();
+}
+
+class _WebSocketExampleState extends State<WebSocketExample> {
+  late WebSocketChannel channel;
+  String message = '';
+  bool isSubscribed = false;
+  Timer? heartbeatTimer; // Timer for heartbeat
+
+  @override
+  void initState() {
+    super.initState();
+    // Connect to the WebSocket server
+    channel = IOWebSocketChannel.connect(
+        'ws://192.168.1.124:8080/app/w6ivkzjoi9afhkowacw3');
+
+    // Listen for messages
+    channel.stream.listen((data) {
+      final decodedData = json.decode(data);
+      //print('Received data: $data'); // Debug print
+
+      // Check if the connection is established
+      if (decodedData['event'] == 'pusher:connection_established' &&
+          !isSubscribed) {
+        //  print('Connection established.');
+
+        // Subscribe to the transactions channel
+        channel.sink.add(json.encode({
+          'event': 'pusher:subscribe',
+          'data': {
+            'auth': '',
+            'channel': 'transactions',
+          },
+        }));
+        isSubscribed = true; // Update the flag to true
+      }
+
+      // Handle subscription success message
+      if (decodedData['event'] == 'pusher_internal:subscription_succeeded') {
+        //  print('Successfully subscribed to transactions channel.');
+      }
+
+      // Handle transaction status updates
+      if (decodedData['event'] == 'TransactionStatusUpdated') {
+        final transactionData = json.decode(decodedData['data']);
+        setState(() {
+          message =
+              'Transaction ID: ${transactionData['transaction_id']} - Status: ${transactionData['status']}';
+        });
+      } else {
+        // For any other messages
+        setState(() {
+          message = data;
+          // print(message);
+        });
+      }
+    });
+
+    // Start sending ping messages periodically
+    heartbeatTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      // if (channel != null) {
+      //   channel.sink.add(json.encode({'event': 'pusher:ping'})); // Sending ping
+      // }
+      channel.sink.add(json.encode({'event': 'pusher:ping'})); // Sending ping
+    });
+  }
+
+  @override
+  void dispose() {
+    heartbeatTimer?.cancel(); // Cancel the heartbeat timer
+    channel.sink.close(); // Close the WebSocket connection when done
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('WebSocket Example')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Message from WebSocket:'),
+            const SizedBox(height: 20),
+            Text(message, style: const TextStyle(fontSize: 24)),
+          ],
+        ),
+      ),
+    );
+  }
+}
