@@ -11,9 +11,9 @@ class APIConstants {
 
   static const String submitKyc = "kyc/create";
   static const String transactionStatusendpoint = "api/get-transaction-status";
-  static const String modesendpoint = "/api/payment-modes";
-  static const String userdetailsendpoint = "api/user-details";
-  static const String channelsendpoint = "/api/payment/modes/";
+  static const String getContractsendpoint = "contracts";
+  static const String makePaymentendpoint = "payment/create";
+  static const String checkTransactionStatus = "payment/status";
   static const String requesttopay = "api/payment/process";
   static const String payBill = "api/bill-payments/purchase";
   static const String transactiondetails = "api/transactions";

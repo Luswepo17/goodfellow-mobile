@@ -4,8 +4,10 @@ import 'package:get_storage/get_storage.dart';
 import 'package:goodfellow/common/widgets/loaders/loaders.dart';
 import 'package:goodfellow/features/Home/screens/home/home.dart';
 import 'package:goodfellow/features/authentication/models/authModel.dart';
+import 'package:goodfellow/features/authentication/screens/kyc/kyc.dart';
 import 'package:goodfellow/features/authentication/screens/setup/setup.dart';
 import 'package:goodfellow/main.dart';
+import 'package:goodfellow/nav_menu.dart';
 import 'package:goodfellow/utils/constants/api_constants.dart';
 import 'package:goodfellow/utils/helpers/network_manager.dart';
 import 'package:goodfellow/utils/http/http_client.dart';
@@ -77,6 +79,13 @@ class SigninController extends GetxController {
           res["data"]?["kyc_profile_id"] ?? "",
         );
 
+        deviceStorage.write(
+          "kyc_status",
+          res["data"]?["kyc_status"] ?? "not_submitted",
+        );
+
+        deviceStorage.write("phone_id", res["data"]?["phone_id"] ?? "");
+
         // await Workmanager().cancelAll();
 
         // await Workmanager().registerPeriodicTask(
@@ -100,6 +109,8 @@ class SigninController extends GetxController {
 
         bool firstLogin = deviceStorage.read("first_time_login");
 
+        String kycStatus = deviceStorage.read("kyc_status");
+
         // Show success message
         APPLoaders.successSnackBar(
           title: "Login Successful",
@@ -110,7 +121,13 @@ class SigninController extends GetxController {
         Get.offAll(
           transition: Transition.rightToLeft,
           duration: const Duration(milliseconds: 500),
-          () => firstLogin ? const SetupScreen() : const HomeScreen(),
+          () => firstLogin && kycStatus == "not_submitted"
+              ? const SetupScreen()
+              : !firstLogin && kycStatus == "not_submitted"
+              ? KYCScreen()
+              : !firstLogin && kycStatus == "pending"
+              ? KYCScreen()
+              : const NavigationMenu(),
         );
         return;
       } else if (res['error'] != null) {

@@ -6,6 +6,7 @@ import 'package:goodfellow/features/Home/screens/home/home.dart';
 import 'package:goodfellow/features/authentication/screens/login/login.dart';
 import 'package:goodfellow/features/authentication/screens/setup/setup.dart';
 import 'package:goodfellow/features/authentication/screens/splash/widgets/splash_content.dart';
+import 'package:goodfellow/nav_menu.dart';
 import 'package:goodfellow/utils/constants/colors.dart';
 import 'package:goodfellow/utils/helpers/helper_functions.dart';
 
@@ -26,7 +27,7 @@ class SplashScreen extends StatelessWidget {
         splash: const SplashContent(),
         nextScreen: AuthenticationWrapper(
           loginPage: LoginScreen(),
-          homePage: const HomeScreen(),
+          homePage: NavigationMenu(),
         ),
       ),
     );

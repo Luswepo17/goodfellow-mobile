@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:goodfellow/common/images/app_rounded_image.dart';
 import 'package:goodfellow/utils/constants/colors.dart';
@@ -39,16 +40,19 @@ class SplashContent extends StatelessWidget {
               ),
             ],
           ),
-          LottieBuilder.asset(
-            "assets/images/animations/loading.json",
-            width: 100,
-            height: 100,
-          ),
+          // LottieBuilder.asset(
+          //   "assets/images/animations/loading.json",
+          //   width: 100,
+          //   height: 100,
+          // ),
           // const SizedBox(
           //   height: APPSizes.spaceBtwItem,
           // ),
-          // LoadingAnimationWidget.threeArchedCircle(
-          //     color: APPColors.primary, size: 30)
+          SizedBox(height: APPSizes.spaceBtwItem),
+          LoadingAnimationWidget.threeArchedCircle(
+            color: APPColors.secondary,
+            size: 30,
+          ),
         ],
       ),
     );

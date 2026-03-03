@@ -48,7 +48,8 @@ class ResetPasswordController extends GetxController {
         String token = deviceStorage.read("token");
         var res = await APPHttpHelper.post(
           APIConstants.publicUrl,
-          APIConstants.modesendpoint,
+          // APIConstants.modesendpoint,"".,
+          "",
           token,
           resetPasswordModule,
         );

@@ -6,7 +6,6 @@ import 'package:goodfellow/features/authentication/controllers/kyc/kyc_controlle
 import 'package:goodfellow/utils/constants/colors.dart';
 import 'package:goodfellow/utils/constants/sizes.dart';
 import 'package:goodfellow/utils/helpers/helper_functions.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 

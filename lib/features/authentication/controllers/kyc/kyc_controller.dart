@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:goodfellow/common/widgets/loaders/loaders.dart';
 import 'package:goodfellow/features/authentication/models/documentModel.dart';
+import 'package:goodfellow/features/authentication/screens/kyc/kyc.dart';
 import 'package:goodfellow/utils/constants/api_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -117,13 +118,14 @@ class KycController extends GetxController {
 
       final data = jsonDecode(response.body);
 
-      print("REsponse: ${data}");
-
       if (data["status"] == "success") {
         APPLoaders.successSnackBar(
           title: "Success",
           message: "KYC Submitted successfully",
         );
+
+        deviceStorage.write("kyc_status", "pending");
+        Get.offAll(() => KYCScreen());
       } else if (data["status"] == "failure") {
         APPLoaders.errorSnackBar(title: "Failure", message: data["error"]);
       }

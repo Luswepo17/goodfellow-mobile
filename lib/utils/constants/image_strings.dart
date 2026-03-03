@@ -44,7 +44,7 @@ class APPImages {
 
   static const String timeout = "assets/images/other/icons8-timeout-100.png";
 
-  static const String promoBanner1 = "assets/images/other/promo_banner_1.png";
-  static const String promoBanner2 = "assets/images/other/promo_banner_2.jpg";
-  static const String promoBanner3 = "assets/images/other/promo_banner_3.png";
+  static const String promoBanner1 = "assets/banners/1.png";
+  static const String promoBanner2 = "assets/banners/2.jpg";
+  static const String promoBanner3 = "assets/banners/2.jpg";
 }
